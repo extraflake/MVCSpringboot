@@ -15,6 +15,7 @@ public class RegionController {
 
     @GetMapping
     public String index(Model model) {
+        Object region = regionDAO.getAll();
         model.addAttribute("regions", regionDAO.getAll());
         return "";
     }
