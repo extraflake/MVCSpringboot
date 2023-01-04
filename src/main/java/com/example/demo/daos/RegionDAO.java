@@ -28,4 +28,8 @@ public class RegionDAO {
         }
         return regions;
     }
+
+    public boolean insert() {
+        return false;
+    }
 }
