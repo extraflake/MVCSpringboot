@@ -20,7 +20,12 @@
                     <tr th:each="region : ${regions}">
                         <td th:text="${region.id}"></td>
                         <td th:text="${region.name}"></td>
-                        <td>Edit | Delete</td>
+                        <td>
+                            <a th:href="@{region/form/{id} (id = ${region.id})}">Edit</a> | 
+                            <form th:action="@{region/delete/{id} (id = ${region.id})}" method="post">
+                                <input class="btn btn-danger" type="submit" value="Delete" />
+                            </form>
+                        </td>
                     </tr>
                 </tbody>
             </table>

@@ -1,8 +1,10 @@
 package com.example.demo.controllers;
 
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -26,27 +28,39 @@ public class RegionController {
     // CREATE 
     // GET
     // /region/form
-    @GetMapping(value = {"form"})
-    public String create(Model model) {
-        model.addAttribute("region", new Region());
+    @GetMapping(value = {"form", "form/{id}"})
+    public String getById(@PathVariable(required = false) Integer id, Model model) {
+        if(id != null) {
+            model.addAttribute("region", regionDAO.getById(id));
+        }
+        else {
+            model.addAttribute("region", new Region());
+        }
         return "region/form";
     }
 
     // POST
     @PostMapping("save")
-    public String save(Region region) {
-        Boolean result = regionDAO.insert();
+    public String save(@Nullable Region region) {
+        Boolean result;
+        if(region.getId() != null) {
+            result = regionDAO.update(region);
+        }
+        else { 
+            result = regionDAO.insert(region);
+        }
         if(result) {
             return "redirect:/region";
         } else {
             return "region/form";
         }
     }
-
-    // UPDATE
-    // GET
-    // POST
-
+    
     // DELETE
     // POST
+    @PostMapping(value = {"delete/{id}"})
+    public String delete(@PathVariable(required = true) Integer id) {
+        regionDAO.delete(id);
+        return "redirect:/region";
+    }
 }
