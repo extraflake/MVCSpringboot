@@ -49,7 +49,7 @@ public class RegionDAO {
     public Boolean insert(Region region) {
         Integer result = 0;
         try {
-            PreparedStatement preparedStatement = con.prepareStatement("INSERT INTO tb_m_region (regionName) VALUES (?)");
+            PreparedStatement preparedStatement = con.prepareStatement("INSERT INTO tb_m_region (name) VALUES (?)");
             preparedStatement.setString(1, region.getName());
             result = preparedStatement.executeUpdate();
             return result > 0;

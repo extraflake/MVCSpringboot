@@ -9,6 +9,7 @@ public class Region {
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer Id;
+    
     @Column(name = "name", nullable = false)
     private String Name;
 

@@ -14,7 +14,7 @@ public class Division {
     private String Name;
 
     @ManyToOne
-    @JoinColumn(name = "region_id")
+    @JoinColumn(name = "regionId")
     private Region region;
 
     public void setId(Integer id) {

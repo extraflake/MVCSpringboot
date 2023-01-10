@@ -9,58 +9,55 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.demo.config.DBConnection;
+import com.example.demo.daos.DivisionDAO;
 import com.example.demo.daos.RegionDAO;
-import com.example.demo.models.Region;
+import com.example.demo.models.Division;
 
 @Controller
-@RequestMapping("region")
-public class RegionController {
+@RequestMapping("division")
+public class DivisionController {
+    private DivisionDAO divisionDAO = new DivisionDAO(DBConnection.getConnection());
     private RegionDAO regionDAO = new RegionDAO(DBConnection.getConnection());
 
     // GET ALL
     // /region
     @GetMapping
     public String index(Model model) {
-        model.addAttribute("regions", regionDAO.getAll());
-        return "region/index";
+        Object data = divisionDAO.getAll();
+        model.addAttribute("divisions", divisionDAO.getAll());
+        return "division/index";
     }
 
-    // CREATE 
-    // GET
-    // /region/form
     @GetMapping(value = {"form", "form/{id}"})
     public String form(@PathVariable(required = false) Integer id, Model model) {
+        model.addAttribute("regions", regionDAO.getAll());
         if(id != null) {
-            model.addAttribute("region", regionDAO.getById(id));
+            model.addAttribute("division", divisionDAO.getById(id));
+        } else {
+            model.addAttribute("division", new Division());
         }
-        else {
-            model.addAttribute("region", new Region());
-        }
-        return "region/form";
+        return "division/form";
     }
 
-    // POST
     @PostMapping("save")
-    public String save(@Nullable Region region) {
+    public String save(@Nullable com.example.demo.dto.Division division) {
         Boolean result;
-        if(region.getId() != null) {
-            result = regionDAO.update(region);
+        if(division.getId() != null) {
+            result = divisionDAO.update(division);
         }
         else { 
-            result = regionDAO.insert(region);
+            result = divisionDAO.insert(division);
         }
         if(result) {
-            return "redirect:/region";
+            return "redirect:/division";
         } else {
             return "region/form";
         }
     }
-    
-    // DELETE
-    // POST
+
     @PostMapping(value = {"delete/{id}"})
     public String delete(@PathVariable(required = true) Integer id) {
-        regionDAO.delete(id);
-        return "redirect:/region";
+        divisionDAO.delete(id);
+        return "redirect:/division";
     }
 }
